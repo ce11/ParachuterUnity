@@ -13,7 +13,7 @@ public class ScoreBehavior : MonoBehaviour {
     void OnGUI()
     {
         GUITools.DrawRect(new Rect(0, 50, 130, 30), Color.white);
-        GUITools.DrawText(new Rect(0, 50, 130, 30), "Score: " + score);
+        GUITools.DrawRegularText(new Rect(0, 50, 130, 30), "Score: " + score);
     }
 
     void Update () {

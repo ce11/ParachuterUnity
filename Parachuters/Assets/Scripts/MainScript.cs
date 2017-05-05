@@ -3,20 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MainScript : MonoBehaviour {
-    public int spawnTime = 1000;
+    public int difficultyIncreaseAfter = 1;
+    private int difficultyIncreaseCounter = 0;
+    public float difficultyIncreaseIncrement = 1.2f;
+    public int minSpawnTime = 200;
+    public int maxSpawnTime = 400;
+    private int randomSpawnTime;
     private int spawnCounter = 0;
     private GameObject plane;
     HeartsBehavior livesHandler;
     ScoreBehavior scoreHandler;
-
+    
     void EndGame()
     {
 
+        // Show replay button
+    }
+
+    void OnGUI()
+    {
+        if(livesHandler.lives <= 0)
+        {
+            GUITools.DrawLargeText(new Rect(Screen.width /2 - 150, Screen.height /2 -150, 300, 300), "GAME OVER");
+        }
+    }
+
+    void IncrementDifficulty()
+    {
+        minSpawnTime = (int)( minSpawnTime / difficultyIncreaseIncrement);
+        maxSpawnTime = (int)( maxSpawnTime / difficultyIncreaseIncrement);
     }
 
     public void AddScore()
     {
         scoreHandler.IncrementScore();
+        difficultyIncreaseCounter++;
+        if(difficultyIncreaseCounter >= difficultyIncreaseAfter)
+        {
+            difficultyIncreaseCounter = 0;
+            IncrementDifficulty();
+        }
     }
 
     public void RemoveLife()
@@ -27,7 +53,6 @@ public class MainScript : MonoBehaviour {
         }else
         {
             livesHandler.lives--;
-
         }
     }
 
@@ -36,25 +61,26 @@ public class MainScript : MonoBehaviour {
         plane = GameObject.Find("plane");
         livesHandler = GameObject.Find("heartContainer").gameObject.GetComponent<HeartsBehavior>();
         scoreHandler = GameObject.Find("scoreContainer").gameObject.GetComponent<ScoreBehavior>();
-        GameObject.Find("parachutist").gameObject.GetComponent<ParachutistBehavior>().missedParachuter += RemoveLife;
-        GameObject.Find("parachutist").gameObject.GetComponent<ParachutistBehavior>().caughtParachuter += AddScore;
-        Debug.Log(livesHandler == null);
+        GenerateSpawnTime();
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+	void GenerateSpawnTime()
+    {
+        System.Random r = new System.Random();
+        randomSpawnTime = r.Next(minSpawnTime, maxSpawnTime);
+    }
 
     void FixedUpdate()
     {
-        spawnCounter++;
-        if(spawnCounter == spawnTime)
+        // Increment spawn counter if there are lives left
+        if(livesHandler.lives > 0)
+        {
+            spawnCounter++;
+        }
+        if(spawnCounter >= randomSpawnTime)
         {
             spawnCounter = 0;
-            System.Random r = new System.Random();
-            spawnTime = r.Next(500, 1000);
-            Debug.Log("new spawn "+spawnTime);
+            GenerateSpawnTime();
             SpawnParachuter();
         }
     }
@@ -62,11 +88,11 @@ public class MainScript : MonoBehaviour {
     // Method to spawn parachuter at plane location
     void SpawnParachuter()
     {
+        // Create and position parachuter
         GameObject newParachuter = (GameObject)Instantiate(Resources.Load("ParachuterPrefab", typeof(GameObject)));
         newParachuter.transform.position = plane.transform.position;
+        // Initialize event listeners
         newParachuter.gameObject.GetComponent<ParachutistBehavior>().missedParachuter += RemoveLife;
         newParachuter.gameObject.GetComponent<ParachutistBehavior>().caughtParachuter += AddScore;
-
-        Debug.Log(plane.transform.position.x);
     }
 }

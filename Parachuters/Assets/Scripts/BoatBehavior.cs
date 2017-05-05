@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoatBehavior : MonoBehaviour {
+public class BoatBehavior : SpaceAwareObject {
     public float boatSpeed = 2f;
-    private float leftBorder, rightBorder;
     // Use this for initialization
-    void Start () {
-        // Init borders
-        var dist = (transform.position - Camera.main.transform.position).z;
-        leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).x;
-        rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
+    public override void Start () {
+        base.Start();
     }
 	
 	// Update is called once per frame
@@ -30,10 +26,4 @@ public class BoatBehavior : MonoBehaviour {
             transform.localScale = new Vector3(1f, 1f, 1f);
         }
     }
-
-    void OnCollisionEnter2D(Collision2D coll)
-    {
-        Debug.Log("Boat Collide");
-    }
-
 }

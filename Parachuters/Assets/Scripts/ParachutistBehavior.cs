@@ -2,19 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParachutistBehavior : MonoBehaviour
+public class ParachutistBehavior : SpaceAwareObject
 {
+    public float baseGravity = 0.3f;
     public System.Action caughtParachuter;
     public System.Action missedParachuter;
-    private float bottomBorder;
-    MainScript main;
+
     // Use this for initialization
-    void Start()
+    public override void Start()
     {
-        var dist = (transform.position - Camera.main.transform.position).z;
-        bottomBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
-        Debug.Log("New Parachute " + bottomBorder);
-        main = GameObject.Find("Main Camera").gameObject.GetComponent<MainScript>();
+        base.Start();
     }
 
     void FixedUpdate()
@@ -32,7 +29,13 @@ public class ParachutistBehavior : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Parachute Trigger");
+        Debug.Log("bam "+other.gameObject.name);
+        // Ignore collisions with objects that are not boats
+        if(other.gameObject.name != "boat")
+        {
+            return;
+        }
+
         if (caughtParachuter != null)
         {
             caughtParachuter.Invoke();

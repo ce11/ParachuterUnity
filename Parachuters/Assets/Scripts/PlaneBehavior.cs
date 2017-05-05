@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaneBehavior : MonoBehaviour
+public class PlaneBehavior : SpaceAwareObject
 {
+    public float planeSpeedIncrement = 1.2f;
     public float planeSpeed = -2f;
-    private float leftBorder, rightBorder;
     // Use this for initialization
-    void Start()
+    public override void Start()
     {
-        // Init borders
-        var dist = (transform.position - Camera.main.transform.position).z;
-        leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).x;
-        rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
+        base.Start();
         // Start movement
         StartMovement();
     }
@@ -38,4 +35,8 @@ public class PlaneBehavior : MonoBehaviour
         transform.localScale = new Vector3(planeSpeed < 0 ? 1f : -1f, 1f, 1f);
     }
 
+    public void IncrementPlaneSpeed()
+    {
+        planeSpeed *= planeSpeedIncrement;
+    }
 }

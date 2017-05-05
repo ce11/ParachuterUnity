@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\ParachutistBehavior.cs" />
      <Compile Include="Assets\Scripts\PlaneBehavior.cs" />
      <Compile Include="Assets\Scripts\ScoreBehavior.cs" />
+     <Compile Include="Assets\Scripts\SpaceAwareObject.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/DevPrograms/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
