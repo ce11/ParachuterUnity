@@ -12,6 +12,12 @@ public class ParachutistBehavior : SpaceAwareObject
     public override void Start()
     {
         base.Start();
+        GetComponent<Renderer>().enabled = true;
+    }
+
+    public void DestroySelf()
+    {
+        Destroy(gameObject);
     }
 
     void FixedUpdate()
@@ -29,7 +35,6 @@ public class ParachutistBehavior : SpaceAwareObject
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("bam "+other.gameObject.name);
         // Ignore collisions with objects that are not boats
         if(other.gameObject.name != "boat")
         {

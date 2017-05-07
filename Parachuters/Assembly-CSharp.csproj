@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\BoatBehavior.cs" />
+     <Compile Include="Assets\Scripts\ButtonBehavior.cs" />
      <Compile Include="Assets\Scripts\GUITools.cs" />
      <Compile Include="Assets\Scripts\HeartsBehavior.cs" />
      <Compile Include="Assets\Scripts\MainScript.cs" />

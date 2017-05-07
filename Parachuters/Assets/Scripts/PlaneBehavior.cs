@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlaneBehavior : SpaceAwareObject
 {
-    public float planeSpeedIncrement = 1.2f;
     public float planeSpeed = -2f;
     // Use this for initialization
     public override void Start()
@@ -33,10 +32,5 @@ public class PlaneBehavior : SpaceAwareObject
 
         // Setting plane orientation
         transform.localScale = new Vector3(planeSpeed < 0 ? 1f : -1f, 1f, 1f);
-    }
-
-    public void IncrementPlaneSpeed()
-    {
-        planeSpeed *= planeSpeedIncrement;
     }
 }

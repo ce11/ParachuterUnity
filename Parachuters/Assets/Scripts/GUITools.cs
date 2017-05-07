@@ -30,11 +30,6 @@ public static class GUITools
         fontSize = 40
     };
 
-    public static void CreateButton(Rect position, string title, System.Action pressedEvent)
-    {
-
-    }
-
     public static void DrawRegularText(Rect position, string text)
     {
         GUI.Label(position, text, textTextureStyle);

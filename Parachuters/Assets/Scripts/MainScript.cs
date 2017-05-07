@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainScript : MonoBehaviour {
     public int difficultyIncreaseAfter = 1;
@@ -13,11 +15,17 @@ public class MainScript : MonoBehaviour {
     private GameObject plane;
     HeartsBehavior livesHandler;
     ScoreBehavior scoreHandler;
-    
+    ButtonBehavior buttonHandler;
+
     void EndGame()
     {
-
-        // Show replay button
+        var existingParachuters = Resources.FindObjectsOfTypeAll<ParachutistBehavior>();
+        foreach (var parachuter in existingParachuters)
+        {
+            parachuter.DestroySelf();
+        }
+        buttonHandler.ShowButton();
+        
     }
 
     void OnGUI()
@@ -47,12 +55,10 @@ public class MainScript : MonoBehaviour {
 
     public void RemoveLife()
     {
-        if(livesHandler.lives <= 0)
+        livesHandler.lives--;
+        if (livesHandler.lives <= 0)
         {
             EndGame();
-        }else
-        {
-            livesHandler.lives--;
         }
     }
 
@@ -61,6 +67,11 @@ public class MainScript : MonoBehaviour {
         plane = GameObject.Find("plane");
         livesHandler = GameObject.Find("heartContainer").gameObject.GetComponent<HeartsBehavior>();
         scoreHandler = GameObject.Find("scoreContainer").gameObject.GetComponent<ScoreBehavior>();
+        buttonHandler = Resources.FindObjectsOfTypeAll<ButtonBehavior>().First();
+        buttonHandler.buttonClicked += () =>
+        {
+            SceneManager.LoadScene("Level1");
+        };
         GenerateSpawnTime();
     }
 
