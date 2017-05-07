@@ -28,7 +28,6 @@ public class ParachutistBehavior : SpaceAwareObject
             {
                 missedParachuter.Invoke();
             }
-            
             Destroy(gameObject);
         }
     }

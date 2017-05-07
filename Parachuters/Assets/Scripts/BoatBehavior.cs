@@ -11,14 +11,14 @@ public class BoatBehavior : SpaceAwareObject {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey(KeyCode.RightArrow) && transform.position.x < rightBorder)
+        if (Input.GetKey(KeyCode.RightArrow) && transform.position.x + objectSize.x / 2 < rightBorder)
         {
             var pos = transform.position;
             pos.x += boatSpeed * Time.deltaTime;
             transform.position = pos;
             transform.localScale = new Vector3(-1f, 1f, 1f);
         }
-        if (Input.GetKey(KeyCode.LeftArrow) && transform.position.x > leftBorder)
+        if (Input.GetKey(KeyCode.LeftArrow) && transform.position.x - objectSize.x / 2 > leftBorder)
         {
             var pos = transform.position;
             pos.x += boatSpeed * -1 * Time.deltaTime;
