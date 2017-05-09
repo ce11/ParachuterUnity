@@ -7,7 +7,7 @@ public class ParachutistBehavior : SpaceAwareObject
     public float baseGravity = 0.3f;
     public System.Action caughtParachuter;
     public System.Action missedParachuter;
-
+    bool toDestroy = false;
     // Use this for initialization
     public override void Start()
     {
@@ -17,18 +17,25 @@ public class ParachutistBehavior : SpaceAwareObject
 
     public void DestroySelf()
     {
-        Destroy(gameObject);
+        toDestroy = true;
     }
 
     void FixedUpdate()
     {
-        if (transform.position.y - transform.localScale.y < bottomBorder)
+        // We need to end the game
+        if (toDestroy)
         {
-            if(missedParachuter != null)
-            {
-                missedParachuter.Invoke();
-            }
             Destroy(gameObject);
+        }else
+        {
+            if (transform.position.y - transform.localScale.y < bottomBorder)
+            {
+                if (missedParachuter != null)
+                {
+                    missedParachuter.Invoke();
+                }
+                Destroy(gameObject);
+            }
         }
     }
 
