@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BoatBehavior : SpaceAwareObject {
     public float boatSpeed = 2f;
+    private readonly int right = 1;
+    private readonly int left = -1;
     // Use this for initialization
     public override void Start () {
         base.Start();
@@ -11,19 +13,36 @@ public class BoatBehavior : SpaceAwareObject {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey(KeyCode.RightArrow) && transform.position.x + objectSize.x / 2 < rightBorder)
+#if UNITY_ANDROID
+        if(Input.touchCount > 0)
         {
-            var pos = transform.position;
-            pos.x += boatSpeed * Time.deltaTime;
-            transform.position = pos;
-            transform.localScale = new Vector3(-1f, 1f, 1f);
+            var touch = Input.GetTouch(0);
+            Move(Camera.main.ScreenToWorldPoint(touch.position).x > transform.position.x ? right : left);
         }
-        if (Input.GetKey(KeyCode.LeftArrow) && transform.position.x - objectSize.x / 2 > leftBorder)
+#else
+        if (Input.GetKey(KeyCode.RightArrow))
         {
-            var pos = transform.position;
-            pos.x += boatSpeed * -1 * Time.deltaTime;
-            transform.position = pos;
-            transform.localScale = new Vector3(1f, 1f, 1f);
+            Move(right);
         }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            Move(left);
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x ? right : left);
+        }
+#endif
+    }
+    private void Move(int direction)
+    {
+        var pos = transform.position;
+        if(pos.x + objectSize.x/2 <= rightBorder && direction == right || pos.x - objectSize.x / 2 >= leftBorder && direction == left) 
+        {
+            pos.x += boatSpeed * direction * Time.deltaTime;
+            transform.position = pos;
+            transform.localScale = new Vector3(1f * -direction, 1f, 1f);
+        }
+
     }
 }
